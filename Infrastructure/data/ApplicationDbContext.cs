@@ -8,7 +8,7 @@ public class ApplicationDbContext : DbContext
 {
 
     private readonly IConfiguration _configuration;
-    public ApplicationDbContext() {}
+    public ApplicationDbContext() { }
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IConfiguration configuration) : base(options)
     {
         _configuration = configuration;
@@ -19,8 +19,9 @@ public class ApplicationDbContext : DbContext
     {
         base.OnConfiguring(optionsBuilder);
 
-        optionsBuilder.UseSqlServer(_configuration.GetConnectionString("DefaultConnection"));
-        // optionsBuilder.UseSqlServer(" Server=localhost,1433;Database=shoppe;User Id=sa;Password=Test@123;Encrypt=False;TrustServerCertificate=True;");
+        // optionsBuilder.UseSqlServer(_configuration.GetConnectionString("DefaultConnection"));
+
+        optionsBuilder.UseSqlServer(" Server=localhost,1433;Database=shoppe;User Id=sa;Password=Test@123;Encrypt=False;TrustServerCertificate=True;");
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -36,7 +37,6 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<UserEntity>(entity =>
         {
             entity.ToTable("User");
-
             entity.HasKey(e => e.user_id);
             entity.HasOne(d => d.Account)
                .WithOne(p => p.User)
@@ -47,17 +47,19 @@ public class ApplicationDbContext : DbContext
         {
             entity.ToTable("Category");
             entity.HasKey(e => e.Id).HasName("category_id");
+            entity.Property(e => e.Id).HasColumnName("category_id");
 
             entity.HasOne(d => d.Account)
                .WithMany(p => p.ListCategory)
                .HasForeignKey(d => d.created_by);
-            
+
         });
 
         modelBuilder.Entity<ProductEntity>(entity =>
         {
             entity.ToTable("Product");
             entity.HasKey(e => e.Id).HasName("product_id");
+            entity.Property(e => e.Id).HasColumnName("product_id");
 
             entity.HasOne(d => d.Category)
                .WithMany(p => p.ListProduct)

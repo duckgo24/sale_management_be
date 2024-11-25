@@ -11,7 +11,8 @@ namespace WebApi
     {
         public static IServiceCollection AddWebApiService(this IServiceCollection service)
         {
-            service.AddScoped<IUserService, GetCurrentUser>();
+            service.AddHttpContextAccessor();
+            service.AddScoped<IUser, GetCurrentUser>();
             return service;
         }
     }

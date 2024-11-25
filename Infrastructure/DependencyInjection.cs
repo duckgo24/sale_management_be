@@ -1,8 +1,13 @@
-﻿using Application.Interface;
-using Infrastructure.Repositories;
+﻿using System;
+using Application.Identities;
+using Infrastructure.data.Interceptor;
+using Infrastructure.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Infrastructure;
 
@@ -16,8 +21,28 @@ public static class Infrastructure
             options.UseSqlServer(connectionString);
         });
 
-        service.AddScoped<IAccountRepository, AccountRepository>();
+        service.AddAuthentication(opt =>
+        {
+            opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(opt =>
+        {
+            opt.SaveToken = true;
+            opt.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = configuration["Jwt:Issuer"],
+                ValidAudience = configuration["Jwt:Audience"],
+                IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(configuration["Jwt:AccessKey"]))
+            };
+        });
 
+        service.AddScoped<IJwtService, JwtService>();
+        service.AddScoped<ISaveChangesInterceptor, EntityInterceptor>();
         return service;
     }
 }

@@ -19,7 +19,7 @@ namespace Infrastructure.Migrations
                     username = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     role = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    isBanned = table.Column<bool>(type: "bit", nullable: false),
+                    is_banned = table.Column<bool>(type: "bit", nullable: false),
                     created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
                     updated_at = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -32,10 +32,10 @@ namespace Infrastructure.Migrations
                 name: "Category",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    category_id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     category_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    image = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    category_desc = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    category_image = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
                     created_by = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     last_updated = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -43,7 +43,7 @@ namespace Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("category_id", x => x.Id);
+                    table.PrimaryKey("category_id", x => x.category_id);
                     table.ForeignKey(
                         name: "FK_Category_Account_created_by",
                         column: x => x.created_by,
@@ -83,7 +83,7 @@ namespace Infrastructure.Migrations
                 name: "Product",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    product_id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     product_desc = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     category_id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -93,7 +93,7 @@ namespace Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("product_id", x => x.Id);
+                    table.PrimaryKey("product_id", x => x.product_id);
                     table.ForeignKey(
                         name: "FK_Product_Account_created_by",
                         column: x => x.created_by,
@@ -104,7 +104,7 @@ namespace Infrastructure.Migrations
                         name: "FK_Product_Category_category_id",
                         column: x => x.category_id,
                         principalTable: "Category",
-                        principalColumn: "Id");
+                        principalColumn: "category_id");
                 });
 
             migrationBuilder.CreateTable(
@@ -128,7 +128,7 @@ namespace Infrastructure.Migrations
                         name: "FK_ProductDetail_Product_product_id",
                         column: x => x.product_id,
                         principalTable: "Product",
-                        principalColumn: "Id",
+                        principalColumn: "product_id",
                         onDelete: ReferentialAction.Cascade);
                 });
 

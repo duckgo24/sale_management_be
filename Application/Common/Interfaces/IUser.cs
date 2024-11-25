@@ -2,7 +2,7 @@ using System;
 
 namespace Application.Interface
 {
-    public interface IUserService
+    public interface IUser
     {
         public string getCurrentUser();
     }

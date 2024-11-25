@@ -4,7 +4,7 @@ using Application.Interface;
 
 namespace WebApi.Services
 {
-    public class GetCurrentUser : IUserService
+    public class GetCurrentUser : IUser
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         public GetCurrentUser(IHttpContextAccessor httpContextAccessor)
@@ -14,8 +14,7 @@ namespace WebApi.Services
 
         public string getCurrentUser()
         {
-            throw new NotImplementedException();
-            // return _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return _httpContextAccessor.HttpContext?.User?.Claims?.FirstOrDefault(c => c.Type == "acc_id")?.Value ?? string.Empty;
         }
     }
 }

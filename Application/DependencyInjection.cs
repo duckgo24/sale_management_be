@@ -1,12 +1,24 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Application.Behaviors;
+using Microsoft.Extensions.DependencyInjection;
+using MediatR;
+using WebApi.DBHelper;
 
-namespace Application;
-
-public static class Application
+namespace Application
 {
-    public static IServiceCollection AddApplicationService(this IServiceCollection service)
+    public static class DependencyInjection
     {
-        
-        return service;
+        public static IServiceCollection AddApplicationService(this IServiceCollection service)
+        {
+
+            service.AddMediatR(cfg =>
+            {
+                cfg.RegisterServicesFromAssembly(typeof(DependencyInjection).Assembly);
+            });
+
+            service.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+            service.AddScoped<IDbHelper, DbHepler>();
+
+            return service;
+        }
     }
 }

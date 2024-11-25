@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241123175409_initDb")]
+    [Migration("20241125161243_initDb")]
     partial class initDb
     {
         /// <inheritdoc />
@@ -32,7 +32,7 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("created_at")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("isBanned")
+                    b.Property<bool>("is_banned")
                         .HasColumnType("bit");
 
                     b.Property<string>("password")
@@ -58,7 +58,16 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.CategoryEntity", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("category_id");
+
+                    b.Property<string>("category_desc")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("category_image")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("category_name")
                         .IsRequired()
@@ -70,14 +79,6 @@ namespace Infrastructure.Migrations
                     b.Property<string>("created_by")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("image")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("last_updated")
                         .HasColumnType("datetime2");
@@ -137,7 +138,8 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.ProductEntity", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("product_id");
 
                     b.Property<string>("category_id")
                         .IsRequired()
