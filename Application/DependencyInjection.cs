@@ -16,7 +16,6 @@ namespace Application
             });
 
             service.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-            service.AddScoped<IDbHelper, DbHepler>();
 
             return service;
         }

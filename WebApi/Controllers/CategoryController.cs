@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Application.Category.Commands.CreateCategory;
+using Application.Category.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -23,6 +24,13 @@ namespace WebApi.Controllers
         {
             _logger = logger;
             _mediator = mediator;
+        }
+
+        [HttpGet($"/list-category")]
+        public async Task<IActionResult> GetListCategory([FromQuery] GetCategoryPaginationQuery getCategoryPaginationQuery ) 
+        {
+
+            return Ok(await _mediator.Send(getCategoryPaginationQuery));
         }
 
         [HttpPost("create")]

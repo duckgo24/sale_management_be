@@ -25,7 +25,7 @@ namespace Application.Identities.Commands.SignUp
         public async Task<AccountDto> Handle(CreateSignUpCommand request, CancellationToken cancellationToken)
         {
 
-            var checkExitAccount = await _DbHelper.ExcuteProceduceAsync<AccountEntity>
+            var checkExitAccount = await _DbHelper.ExcuteProceduceSingleDataAsync<AccountEntity>
             (
                 "sp_find_account_by_username",
                 new DynamicParameters(new
@@ -39,7 +39,7 @@ namespace Application.Identities.Commands.SignUp
             }
 
 
-            var accountNew = await _DbHelper.ExcuteProceduceAsync<AccountDto>
+            var accountNew = await _DbHelper.ExcuteProceduceSingleDataAsync<AccountDto>
             (
                 "sp_create_account",
                 new DynamicParameters(new

@@ -21,7 +21,7 @@ namespace WebApi.DBHelper
             _user = user;
         }
 
-        public async Task<T> ExcuteProceduceAsync<T>(string procedureName, DynamicParameters parameters)
+        public async Task<T> ExcuteProceduceSingleDataAsync<T>(string procedureName, DynamicParameters parameters)
         {
             var conn = _configuration.GetConnectionString("DefaultConnection");
             try
@@ -35,6 +35,28 @@ namespace WebApi.DBHelper
                         return default!;
                     }
                     return result;
+                }
+            }
+            catch (System.Exception)
+            {
+                throw new InvalidOperationException("Query returned null.");
+            }
+        }
+
+        public async Task<List<T>> ExcuteProceduceMultiDataAsync<T>(string procedureName, DynamicParameters parameters)
+        {
+            var conn = _configuration.GetConnectionString("DefaultConnection");
+            try
+            {
+                using (var connection = new SqlConnection(conn))
+                {
+                    connection.Open();
+                    var result = await connection.QueryAsync<T>(procedureName, parameters, commandType: CommandType.StoredProcedure, transaction: sqlTransaction);
+                    if (result == null)
+                    {
+                        return default!;
+                    }
+                    return result.ToList();
                 }
             }
             catch (System.Exception)

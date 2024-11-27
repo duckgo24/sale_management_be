@@ -26,7 +26,7 @@ namespace Application.Identities.Commands.SignIn
 
         public async Task<TokenDto> Handle(CreateSignInCommand request, CancellationToken cancellationToken)
         {
-            var account = await _DbHelper.ExcuteProceduceAsync<AccountEntity>
+            var account = await _DbHelper.ExcuteProceduceSingleDataAsync<AccountEntity>
             (
                 "sp_find_account_by_username",
                 new DynamicParameters(new

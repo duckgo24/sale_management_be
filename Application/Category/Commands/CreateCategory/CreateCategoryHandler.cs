@@ -20,15 +20,34 @@ namespace Application.Category.Commands.CreateCategory
         {
             try
             {
-                var category = await _dbHelper.ExcuteProceduceByUserAsync<CategoryDto>("sp_create_category", new Dapper.DynamicParameters(new
+
+                var checkCategoryExit = await _dbHelper.ExcuteProceduceSingleDataAsync<CategoryDto>(
+                    "sp_find_category_by_name",
+                     new Dapper.DynamicParameters(
+                            new
+                            {
+                                category_name = request.category_name
+                            })
+                    );
+
+                if (checkCategoryExit?.category_id != null)
                 {
-                    category_id = Guid.NewGuid().ToString(),
-                    category_name = request.category_name,
-                    category_desc = request.category_desc,
-                    category_image = request.category_image
-                })
+                    throw new BadRequestException("Category is exist.");
+                }
+
+
+                var newCategory = await _dbHelper.ExcuteProceduceByUserAsync<CategoryDto>(
+                    "sp_create_category",
+                     new Dapper.DynamicParameters(
+                        new
+                        {
+                            category_id = Guid.NewGuid().ToString(),
+                            category_name = request.category_name,
+                            category_desc = request.category_desc,
+                            category_image = request.category_image
+                        })
                 );
-                return category;
+                return newCategory;
             }
             catch (Exception ex)
             {

@@ -21,7 +21,7 @@ namespace WebApi.Middleware
                 if (httpContext.Response.StatusCode == StatusCodes.Status403Forbidden)
                      throw new ForbiddenAccessException();
                 if (httpContext.Response.StatusCode == StatusCodes.Status401Unauthorized)
-                    throw new UnauthorizedAccessException();
+                    throw new Domain.Exceptions.UnauthorizedAccessException();
             }
             catch (BadRequestException e)
             {
@@ -29,7 +29,7 @@ namespace WebApi.Middleware
                 StatusCodes.Status400BadRequest;
                 await httpContext.Response.WriteAsJsonAsync(new { success = false, error = e.Message });
             }
-            catch (UnauthorizedAccessException e)
+            catch (Domain.Exceptions.UnauthorizedAccessException e)
             {
                 httpContext.Response.StatusCode =
                 StatusCodes.Status401Unauthorized;

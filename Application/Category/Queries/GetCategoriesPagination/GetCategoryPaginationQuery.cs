@@ -2,14 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.Common.Dtos.ResponData;
+using MediatR;
 
-namespace Application.Common.Dtos.ResponData
+namespace Application.Category.Queries
 {
-    public class ResponDataDto
+    public class GetCategoryPaginationQuery : IRequest<ResponDataDto>
     {
-        public long total_record { get; set; }
         public int page_number { get; set; }
         public int page_size { get; set; }
-        public dynamic data { get; set; } 
     }
 }

@@ -1,13 +1,16 @@
 ﻿using System;
+using System.Data;
 using Application.Identities;
 using Infrastructure.data.Interceptor;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using WebApi.DBHelper;
 
 namespace Infrastructure;
 
@@ -20,6 +23,7 @@ public static class Infrastructure
             var connectionString = configuration.GetConnectionString("DefaultConnection");
             options.UseSqlServer(connectionString);
         });
+   
 
         service.AddAuthentication(opt =>
         {
@@ -43,6 +47,7 @@ public static class Infrastructure
 
         service.AddScoped<IJwtService, JwtService>();
         service.AddScoped<ISaveChangesInterceptor, EntityInterceptor>();
+        service.AddScoped<IDbHelper, DbHepler>();
         return service;
     }
 }

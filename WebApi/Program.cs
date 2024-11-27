@@ -3,6 +3,9 @@ using WebApi;
 using Infrastructure;
 using Microsoft.OpenApi.Models;
 using WebApi.Middleware;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,7 +41,12 @@ builder.Services.AddSwaggerGen(option =>
         }
     });
 });
-
+// builder.Services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo(@"C:\temp-keys\"))
+//                 .UseCryptographicAlgorithms(new AuthenticatedEncryptorConfiguration()
+//                 {
+//                     EncryptionAlgorithm = EncryptionAlgorithm.AES_256_CBC,
+//                     ValidationAlgorithm = ValidationAlgorithm.HMACSHA256
+//                 });
 
 
 builder.Services.AddWebApiService();
